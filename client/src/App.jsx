@@ -147,40 +147,63 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white p-4">
-      <header className="mb-6 flex justify-between items-center border-b border-purple-500 border-opacity-30 pb-4" style={{backdropFilter: 'blur(4px)'}}>
-        <div className="flex items-center gap-3">
-          <span className="text-3xl">🎲</span>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-            RPG Tabletop
-          </h1>
-        </div>
-        <div className="bg-gray-800 bg-opacity-50 px-4 py-2 rounded-full border border-gray-600">
-          <span className="text-sm text-gray-400">Jugando como:</span>
-          <span className="font-bold text-white ml-2">
-            {role === 'GM' ? '👑 Game Master' : '⚔️ Jugador'}
-          </span>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white p-4 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-transparent to-transparent"></div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left Panel: Role Specific */}
-        <div className="lg:col-span-2">
-          {role === 'GM' ? (
-            <GameMasterPanel socket={socket} enemies={gameState.enemies} />
-          ) : (
-            <PlayerSheet socket={socket} player={{ name: playerName || 'Aventurero', hp: 25 }} />
-          )}
-        </div>
+      <div className="relative z-10">
+        <header className="mb-6 bg-slate-900/50 backdrop-blur-md rounded-2xl p-4 border border-slate-700/50 shadow-xl">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-gradient-to-br from-cyan-400 to-blue-500 p-3 rounded-xl shadow-lg">
+                <span className="text-3xl">🎲</span>
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-teal-400 bg-clip-text text-transparent">
+                  RPG Tabletop
+                </h1>
+                <p className="text-xs text-gray-400">Sistema de juego en tiempo real</p>
+              </div>
+            </div>
+            <div className="bg-slate-800/80 backdrop-blur px-5 py-3 rounded-xl border border-slate-600 shadow-lg">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <div>
+                  <span className="text-xs text-gray-400 block">Conectado como</span>
+                  <span className="font-bold text-white text-sm">
+                    {role === 'GM' ? '👑 Game Master' : '⚔️ ' + (playerName || 'Jugador')}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
 
-        {/* Right Panel: Chat & Logs */}
-        <div className="lg:col-span-1">
-          <div className="bg-gray-800 bg-opacity-90 rounded-2xl border border-purple-500 border-opacity-20 p-6" style={{backdropFilter: 'blur(4px)'}}>
-            <h2 className="text-xl font-bold mb-4 text-gray-300 flex items-center gap-2">
-              <span className="text-2xl">📜</span>
-              Registro de Aventuras
-            </h2>
-            <ChatLog logs={gameState.logs} />
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+          <div className="xl:col-span-2 space-y-6">
+            {role === 'GM' ? (
+              <GameMasterPanel socket={socket} enemies={gameState.enemies} />
+            ) : (
+              <PlayerSheet socket={socket} player={{ name: playerName || 'Aventurero', hp: 25 }} />
+            )}
+          </div>
+
+          <div className="xl:col-span-1">
+            <div className="sticky top-4">
+              <div className="bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-700/50 shadow-2xl overflow-hidden">
+                <div className="bg-gradient-to-r from-slate-800 to-slate-900 px-6 py-4 border-b border-slate-700">
+                  <h2 className="text-lg font-bold text-cyan-300 flex items-center gap-2">
+                    <span className="text-2xl">📜</span>
+                    Registro de Aventuras
+                    <span className="ml-auto text-xs bg-cyan-900/30 px-2 py-1 rounded-full text-cyan-400">
+                      {gameState.logs.length} eventos
+                    </span>
+                  </h2>
+                </div>
+                <div className="p-4">
+                  <ChatLog logs={gameState.logs} />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
